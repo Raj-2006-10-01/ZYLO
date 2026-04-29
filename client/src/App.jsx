@@ -12,16 +12,25 @@ import Layout from './pages/Layout'
 import Connections from './pages/Connections'
 import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchUser } from './features/user/userSlice'
 
 const App = () => {
   const { user } = useUser()
   const { getToken } = useAuth()
 
-  useEffect(()=>{
-    if (user) {
-      getToken().then((token)=>console.log(token))
+  const dispatsh =useDispatch()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const token =await getToken()
+        dispatsh(fetchUser(token))
+      }
     }
-  },[user])
+    fetchData()
+
+  }, [user,getToken,dispatsh])
 
 
   return (
